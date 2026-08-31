@@ -42,6 +42,24 @@ async def get_repository(full_name: str) -> dict:
     return response.json()
 
 
+# Trae el diff crudo (unified diff) de un PR puntual desde su diff_url publica.
+async def get_diff(diff_url: str) -> str:
+    # GitHub redirige *.diff a patch-diff.githubusercontent.com (302) -- sin esto httpx
+    # devuelve la respuesta de redireccion en vez del diff.
+    async with httpx.AsyncClient(timeout=15.0, follow_redirects=True) as client:
+        response = await client.get(diff_url, headers=_headers())
+
+    if response.status_code == 404:
+        raise GitHubClientError(f"diff not found at '{diff_url}'", status_code=404)
+    if response.status_code == 401:
+        raise GitHubClientError("invalid GITHUB_TOKEN", status_code=401)
+    if response.status_code == 403 and response.headers.get("X-RateLimit-Remaining") == "0":
+        raise GitHubClientError("GitHub rate limit exceeded, try again later", status_code=429)
+    response.raise_for_status()
+
+    return response.text
+
+
 # Trae los PRs abiertos de un repo publico ("owner/repo") usando la REST API de GitHub.
 async def list_pull_requests(full_name: str, state: str = "open") -> list[dict]:
     url = f"{GITHUB_API_BASE}/repos/{full_name}/pulls"

@@ -1,0 +1,65 @@
+diff --git a/index.html b/index.html
+index a83618bcf17b..1ddc541812c8 100644
+--- a/index.html
++++ b/index.html
+@@ -1,20 +1,8 @@
+-<!DOCTYPE html>
+-
+-<html>
+-<head>
+-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+-  <title>Spoon-Knife</title>
+-  <LINK href="styles.css" rel="stylesheet" type="text/css">
+-</head>
+-
+-<body>
+-
+-<img src="forkit.gif" id="octocat" alt="" />
+-
+-<!-- Feel free to change this text here -->
+-<p>
+-  Fork me? Fork you, @octocat!
+-</p>
+-
+-</body>
+-</html>
++<div id="octocat">
++    <img
++          src="https://octodex.github.com/images/NUX_Octodex.gif"
++          alt="Octocat Image"
++        />
++</div>div>
++
++<p>Ready to team up? Let's collaborate, @octocat!</p></p>
+diff --git a/styles.css b/styles.css
+index 9b8528455cf7..546ce004887b 100644
+--- a/styles.css
++++ b/styles.css
+@@ -1,17 +1,15 @@
+-* {
+-  margin:0px;
+-  padding:0px;
++color: #333;
++ line-height: 1.5;
++ text-align: center;
+ }
+ 
+-#octocat {
+-  display: block;
+-  width:384px;
+-  margin: 50px auto;
++body {
++ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
++ background-color: #f8f9fa;
+ }
+ 
+-p {
+-  display: block;
+-  width: 400px;
+-  margin: 50px auto;
+-  font: 30px Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;
++#octocat img {
++ display: block;
++ width: 100%;
++ height: auto;
+ }

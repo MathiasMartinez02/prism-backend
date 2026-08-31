@@ -27,6 +27,10 @@ class Analysis(Base):
     status: Mapped[str] = mapped_column(Text, nullable=False, default="pending")  # pending|running|completed|failed
     overall_score: Mapped[int | None] = mapped_column(Integer, nullable=True)
     ai_provider: Mapped[str | None] = mapped_column(Text, nullable=True)  # 'gemini' | 'ollama'
+    # Version del prompt usado (ver app/ai/prompts.py) - permite debuggear por que salio raro
+    # un finding sabiendo exactamente con que prompt se genero.
+    prompt_version: Mapped[str | None] = mapped_column(Text, nullable=True)
+    error_message: Mapped[str | None] = mapped_column(Text, nullable=True)
     started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
