@@ -8,6 +8,9 @@ class Settings(BaseSettings):
 
     database_url: str = "postgresql+psycopg://prism:prism@localhost:5432/prism"
 
+    # Origenes permitidos para CORS (el frontend llama al backend directo desde el browser).
+    cors_origins: list[str] = ["http://localhost:3000"]
+
     github_token: str | None = None
 
     ai_provider: str = "gemini"
