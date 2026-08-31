@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY pyproject.toml ./
 COPY app ./app
 COPY alembic ./alembic
-# alembic.ini se agrega en el bloque 0.4 (init de Alembic); hasta entonces esta carpeta viaja vacia.
+COPY alembic.ini ./alembic.ini
 
 RUN pip install --no-cache-dir -e .
 
