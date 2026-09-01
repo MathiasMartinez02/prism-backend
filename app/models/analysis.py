@@ -24,7 +24,8 @@ class Analysis(Base):
     pull_request_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("pull_requests.id"), nullable=False
     )
-    status: Mapped[str] = mapped_column(Text, nullable=False, default="pending")  # pending|running|completed|failed
+    # pending|running|completed|failed
+    status: Mapped[str] = mapped_column(Text, nullable=False, default="pending")
     overall_score: Mapped[int | None] = mapped_column(Integer, nullable=True)
     ai_provider: Mapped[str | None] = mapped_column(Text, nullable=True)  # 'gemini' | 'ollama'
     # Version del prompt usado (ver app/ai/prompts.py) - permite debuggear por que salio raro

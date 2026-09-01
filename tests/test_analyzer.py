@@ -34,7 +34,9 @@ class FakeProvider(AIProvider):
 
     async def analyze_hunk(self, file_path: str, diff_hunk: str, context: str = "") -> list[FindingCreate]:
         self.calls.append(file_path)
-        return [FindingCreate(category="quality", severity="low", file_path=file_path, description="finding fake")]
+        return [
+            FindingCreate(category="quality", severity="low", file_path=file_path, description="finding fake")
+        ]
 
 
 @pytest.mark.asyncio

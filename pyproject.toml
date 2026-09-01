@@ -32,6 +32,18 @@ testpaths = ["tests"]
 [tool.setuptools.packages.find]
 include = ["app*"]
 
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.ruff.lint.per-file-ignores]
+# El prompt es texto en lenguaje natural para el modelo, no codigo -- no tiene sentido
+# forzarle el limite de linea del linter.
+"app/ai/prompts.py" = ["E501"]
+
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"

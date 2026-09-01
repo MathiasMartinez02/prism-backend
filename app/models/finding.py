@@ -19,7 +19,9 @@ class Finding(Base):
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), primary_key=True, server_default=func.gen_random_uuid()
     )
-    analysis_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("analyses.id"), nullable=False)
+    analysis_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("analyses.id"), nullable=False
+    )
     category: Mapped[str] = mapped_column(Text, nullable=False)  # bug|security|performance|quality|tests
     severity: Mapped[str] = mapped_column(Text, nullable=False)  # low|medium|high
     file_path: Mapped[str] = mapped_column(Text, nullable=False)

@@ -2,8 +2,8 @@
 import asyncio
 
 from app.ai.provider import AIProvider
-from app.services.diff_parser import parse_diff
 from app.schemas.finding import FindingCreate
+from app.services.diff_parser import parse_diff
 
 # Tope de llamadas concurrentes al AIProvider por analisis: un PR grande puede tener
 # decenas de hunks, y mandarlos todos en paralelo pega directo contra el rate limit

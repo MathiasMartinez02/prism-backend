@@ -1,4 +1,7 @@
-"""Calcula el score agregado de un analisis a partir de sus findings. Formula simple y explicable a proposito."""
+"""Calcula el score agregado de un analisis a partir de sus findings.
+
+Formula simple y explicable a proposito.
+"""
 from collections import Counter
 
 from app.schemas.finding import FindingCreate
