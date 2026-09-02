@@ -6,5 +6,5 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 
-# Alias tipado para inyectar la sesion de DB en cualquier endpoint sin repetir el Depends.
+# Alias tipado para inyectar la sesion de DB en los endpoints.
 DbSession = Annotated[Session, Depends(get_db)]

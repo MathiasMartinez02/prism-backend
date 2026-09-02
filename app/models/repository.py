@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from app.models.pull_request import PullRequest
 
 
-# Repository representa un repo de GitHub del que se traen y analizan PRs.
+# Repo de GitHub del que se traen y analizan PRs.
 class Repository(Base):
     __tablename__ = "repositories"
 

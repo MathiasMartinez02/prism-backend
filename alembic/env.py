@@ -5,8 +5,7 @@ from sqlalchemy import engine_from_config, pool
 from alembic import context
 from app import models  # noqa: F401  (registra los modelos en Base.metadata)
 
-# Import de la app: usamos la URL real de settings (no la de alembic.ini) y la
-# metadata de Base para que el autogenerate detecte los modelos.
+# Usa la URL real de settings y la metadata de Base para el autogenerate.
 from app.core.config import settings
 from app.core.database import Base
 

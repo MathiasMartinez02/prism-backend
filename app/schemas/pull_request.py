@@ -15,3 +15,18 @@ class PullRequestOut(BaseModel):
     author: str | None
     diff_url: str | None
     created_at: datetime
+
+
+# Resumen del ultimo analisis de un PR, embebido en el listado.
+class LatestAnalysisSummary(BaseModel):
+    id: uuid.UUID
+    status: str
+    overall_score: int | None
+    findings_count: int
+    high_severity_count: int
+    category_counts: dict[str, int]  # ej. {"bug": 1, "performance": 2}
+
+
+# PR + su ultimo analisis (si tiene alguno), para la tabla del dashboard.
+class PullRequestListItemOut(PullRequestOut):
+    latest_analysis: LatestAnalysisSummary | None = None

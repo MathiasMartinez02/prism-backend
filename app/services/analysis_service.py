@@ -14,15 +14,12 @@ from app.services.analyzer import analyze_diff
 from app.services.scorer import calculate_score
 
 
-# Se levanta cuando no hay nada que analizar (el PR no tiene diff_url guardada).
+# Error: el PR no tiene diff_url guardada.
 class AnalysisError(Exception):
     pass
 
 
-# Corre el pipeline completo para un PR ya persistido: trae el diff real de GitHub, lo manda
-# al AIProvider configurado, calcula el score y guarda todo (Analysis + Findings) en la DB.
-# Si algo falla, la Analysis queda igual guardada con status='failed' y el error registrado
-# (documentar el fallo es tan importante como documentar el exito para debuggear despues).
+# Corre el pipeline completo sobre un PR y persiste Analysis + Findings.
 async def run_analysis(db: Session, pull_request: PullRequest) -> Analysis:
     if not pull_request.diff_url:
         raise AnalysisError(f"pull request {pull_request.id} no tiene diff_url")

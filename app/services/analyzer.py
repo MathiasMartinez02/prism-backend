@@ -5,14 +5,11 @@ from app.ai.provider import AIProvider
 from app.schemas.finding import FindingCreate
 from app.services.diff_parser import parse_diff
 
-# Tope de llamadas concurrentes al AIProvider por analisis: un PR grande puede tener
-# decenas de hunks, y mandarlos todos en paralelo pega directo contra el rate limit
-# de la capa gratuita de Gemini (o satura un Ollama local en el futuro).
+# Tope de llamadas concurrentes al AIProvider, para no pegar contra el rate limit.
 MAX_CONCURRENT_AI_CALLS = 3
 
 
-# Analiza un diff completo: lo parte en hunks relevantes y le pide findings al provider a cada uno.
-# Un hunk que falla (AIProvider ya lo garantiza) no tira abajo el resto del analisis.
+# Analiza un diff completo: lo parte en hunks y le pide findings al provider.
 async def analyze_diff(provider: AIProvider, diff_text: str) -> list[FindingCreate]:
     hunks = parse_diff(diff_text)
     if not hunks:

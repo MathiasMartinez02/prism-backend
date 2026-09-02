@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from app.models.analysis import Analysis
 
 
-# Finding representa un hallazgo puntual (bug, security, performance, quality, tests) sobre un archivo del PR.
+# Hallazgo puntual detectado sobre un archivo del PR.
 class Finding(Base):
     __tablename__ = "findings"
 

@@ -11,17 +11,13 @@ DEFAULT_MODEL = "gemini-3.6-flash"
 
 
 class GeminiProvider(JsonRetryAIProvider):
-    # Errores de red/API (timeout, 5xx, rate limit ya agotado el retry del SDK): un hunk que
-    # falla por esto se descarta puntualmente (ver JsonRetryAIProvider), no tira abajo el PR.
+    # Errores de red/API: se descarta el hunk, no tira abajo el PR.
     TRANSIENT_ERRORS = (httpx.HTTPError, genai_errors.APIError)
 
     def __init__(self, api_key: str | None = None, model: str = DEFAULT_MODEL):
         self._client = genai.Client(
             api_key=api_key or settings.gemini_api_key,
-            # El default del SDK reintenta hasta 5 veces con backoff exponencial (hasta ~60s
-            # de delay entre intentos): si hay rate limit, el pipeline se puede colgar varios
-            # minutos por hunk. Achicamos eso y dejamos que nuestro propio retry (analyze_hunk)
-            # decida que hacer con la falla en vez de esperar en silencio.
+            # Recorta el retry/timeout default del SDK para no colgarse varios minutos.
             http_options=types.HttpOptions(
                 timeout=20_000,
                 retry_options=types.HttpRetryOptions(attempts=2, max_delay=5),

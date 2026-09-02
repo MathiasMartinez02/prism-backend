@@ -1,4 +1,4 @@
-# Importa todos los modelos para que se registren en Base.metadata (autogenerate de Alembic los necesita).
+# Importa los modelos para que se registren en Base.metadata.
 from app.models.analysis import Analysis
 from app.models.finding import Finding
 from app.models.pull_request import PullRequest

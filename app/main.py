@@ -10,7 +10,7 @@ from app.core.config import settings
 
 app = FastAPI(title="PRISM API", version="0.1.0")
 
-# El frontend (Next.js) llama a este backend directo desde el browser, asi que necesita CORS habilitado.
+# Habilita CORS para que el frontend llame al backend.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
@@ -21,13 +21,13 @@ app.add_middleware(
 app.include_router(pull_requests_router)
 
 
-# Endpoint raiz minimo, solo para confirmar que el servidor levanta correctamente.
+# Confirma que el servidor esta levantado.
 @app.get("/")
 def root() -> dict[str, str]:
     return {"service": "prism-backend", "status": "ok"}
 
 
-# Health check real: ademas de que el proceso responda, confirma que Postgres esta accesible.
+# Health check: confirma que Postgres esta accesible.
 @app.get("/health")
 def health(db: DbSession) -> dict[str, str]:
     try:

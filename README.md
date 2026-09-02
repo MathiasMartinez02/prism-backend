@@ -59,6 +59,7 @@ PRISM trae el diff real de un PR, lo parte en hunks (con contexto alrededor de c
 Solo lo que existe y funciona hoy:
 
 - Conectar un repositorio público de GitHub y listar sus PRs abiertos (persistido en DB, idempotente — sincronizar dos veces no duplica filas).
+- Dashboard con stats agregadas del repo (PRs analizados, score promedio, findings críticos, provider activo) y score/estado visible directamente en la lista de PRs — no hace falta entrar a cada uno para saber si ya fue analizado.
 - Disparar un análisis de AI sobre un PR puntual: trae el diff real, lo analiza hunk por hunk, calcula el score y guarda todo.
 - Dos proveedores de AI intercambiables por env var: **Gemini** (cloud, capa gratuita) y **Ollama** (modelos locales, sin costo — ver nota más abajo).
 - Findings categorizados (`bug` · `security` · `performance` · `quality` · `tests`) con severidad (`low` · `medium` · `high`), agrupados visualmente en el frontend.
@@ -173,9 +174,9 @@ No hay un demo público hosteado todavía — correrlo localmente con `docker co
 
 ## Demo
 
-Dashboard: conectás un repo público de GitHub y ves sus PRs abiertos (datos reales, sin mockear):
+Dashboard: conectás un repo público de GitHub y ves sus PRs abiertos con score y estado inline, más las stats agregadas del repo (datos reales, sin mockear):
 
-![Dashboard listando PRs reales de octocat/Spoon-Knife](docs/dashboard.png)
+![Dashboard con stats y PRs reales de octocat/Spoon-Knife](docs/dashboard.png)
 
 Detalle de PR con un análisis real ya corrido (mismo PR, resultado real de Gemini — no un mock):
 

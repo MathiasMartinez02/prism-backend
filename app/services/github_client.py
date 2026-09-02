@@ -6,7 +6,7 @@ from app.core.config import settings
 GITHUB_API_BASE = "https://api.github.com"
 
 
-# Se levanta cuando GitHub devuelve un error identificable (repo no existe, token invalido, rate limit).
+# Error de GitHub identificado (repo inexistente, token invalido, rate limit).
 class GitHubClientError(Exception):
     def __init__(self, message: str, status_code: int):
         super().__init__(message)
@@ -18,14 +18,13 @@ def _headers() -> dict[str, str]:
         "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28",
     }
-    # GITHUB_TOKEN sale siempre de env var (nunca hardcodeado); sin token igual funciona
-    # para repos publicos, con un limite de rate mas bajo.
+    # GITHUB_TOKEN sale de env var; sin token funciona igual con menos rate limit.
     if settings.github_token:
         headers["Authorization"] = f"Bearer {settings.github_token}"
     return headers
 
 
-# Trae los metadatos del repo (incluye el github_repo_id que necesitamos para el upsert).
+# Trae los metadatos del repo (incluye github_repo_id).
 async def get_repository(full_name: str) -> dict:
     url = f"{GITHUB_API_BASE}/repos/{full_name}"
     async with httpx.AsyncClient(timeout=10.0) as client:
@@ -42,10 +41,9 @@ async def get_repository(full_name: str) -> dict:
     return response.json()
 
 
-# Trae el diff crudo (unified diff) de un PR puntual desde su diff_url publica.
+# Trae el diff crudo de un PR desde su diff_url.
 async def get_diff(diff_url: str) -> str:
-    # GitHub redirige *.diff a patch-diff.githubusercontent.com (302) -- sin esto httpx
-    # devuelve la respuesta de redireccion en vez del diff.
+    # GitHub redirige *.diff (302), hay que seguir el redirect.
     async with httpx.AsyncClient(timeout=15.0, follow_redirects=True) as client:
         response = await client.get(diff_url, headers=_headers())
 
@@ -60,7 +58,7 @@ async def get_diff(diff_url: str) -> str:
     return response.text
 
 
-# Trae los PRs abiertos de un repo publico ("owner/repo") usando la REST API de GitHub.
+# Trae los PRs abiertos de un repo publico.
 async def list_pull_requests(full_name: str, state: str = "open") -> list[dict]:
     url = f"{GITHUB_API_BASE}/repos/{full_name}/pulls"
     async with httpx.AsyncClient(timeout=10.0) as client:

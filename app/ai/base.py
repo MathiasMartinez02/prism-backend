@@ -13,15 +13,12 @@ _findings_adapter = TypeAdapter(list[FindingCreate])
 logger = logging.getLogger(__name__)
 
 
-# Base comun para providers que devuelven JSON en texto libre (Gemini, Ollama). Nunca deja
-# escapar una excepcion: separa errores de red/API (reintenta con el mismo prompt) de JSON
-# invalido/schema invalido (reintenta con un prompt correctivo). Si se agotan los reintentos,
-# el hunk se descarta (lista vacia) en vez de tirar abajo el analisis completo del PR.
+# Base con retry/validacion compartida entre providers (Gemini, Ollama).
 class JsonRetryAIProvider(AIProvider):
-    MAX_RETRIES = 1  # una sola reintentada: si no ajusta al schema en 2 intentos, se descarta el hunk
+    MAX_RETRIES = 1  # 1 reintento antes de descartar el hunk
     TRANSIENT_ERRORS: tuple[type[Exception], ...] = ()
 
-    # Cada provider implementa esto: le pega al modelo con el prompt dado y devuelve el texto crudo.
+    # Cada provider implementa esto: llama al modelo y devuelve el texto crudo.
     async def _generate_json(self, prompt: str) -> str:
         raise NotImplementedError
 
@@ -34,8 +31,7 @@ class JsonRetryAIProvider(AIProvider):
                 raw_response = await self._generate_json(next_prompt)
             except self.TRANSIENT_ERRORS as exc:
                 if attempt == self.MAX_RETRIES:
-                    # Sin este log, un rate limit agotado se ve identico a "no hay findings"
-                    # en la respuesta del endpoint - un problema real quedaria invisible.
+                    # Sin este log, un rate limit agotado se veria igual que "sin findings".
                     logger.warning(
                         "%s: descartando hunk de %s tras error de red/API: %s",
                         type(self).__name__, file_path, exc,

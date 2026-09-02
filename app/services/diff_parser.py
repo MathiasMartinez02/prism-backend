@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from unidiff import PatchSet
 
-# Lockfiles: cambian solo por versionado de dependencias, nunca aportan un finding real.
+# Lockfiles: no aportan findings reales.
 _IGNORED_FILENAMES = {
     "package-lock.json",
     "yarn.lock",
@@ -16,7 +16,7 @@ _IGNORED_FILENAMES = {
     "cargo.lock",
 }
 
-# Extensiones binarias o de assets: no tiene sentido mandarle esto al modelo como "codigo".
+# Extensiones binarias o de assets: no son codigo.
 _IGNORED_EXTENSIONS = {
     ".png", ".jpg", ".jpeg", ".gif", ".ico", ".svg", ".webp", ".bmp",
     ".pdf", ".zip", ".tar", ".gz",
@@ -24,14 +24,14 @@ _IGNORED_EXTENSIONS = {
     ".mp4", ".mp3", ".mov",
 }
 
-# Carpetas de output/generado: si aparecen en el diff no son codigo escrito a mano.
+# Carpetas de codigo generado, no escrito a mano.
 _IGNORED_PATH_SEGMENTS = {
     "node_modules/", "dist/", "build/", ".next/", "__pycache__/",
     "coverage/", "vendor/", ".venv/", "venv/",
 }
 
 
-# Un hunk listo para mandarle al AIProvider: el archivo al que pertenece y el texto del hunk con contexto.
+# Un hunk listo para mandarle al AIProvider.
 @dataclass
 class Hunk:
     file_path: str
@@ -40,7 +40,7 @@ class Hunk:
     removed_lines: int
 
 
-# Decide si un archivo del diff vale la pena analizar (no es lockfile/asset/binario/generado).
+# Decide si un archivo vale la pena analizar.
 def is_relevant_file(file_path: str) -> bool:
     filename = file_path.rsplit("/", 1)[-1].lower()
     if filename in _IGNORED_FILENAMES:

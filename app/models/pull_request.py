@@ -14,11 +14,11 @@ if TYPE_CHECKING:
     from app.models.repository import Repository
 
 
-# PullRequest representa un PR de GitHub asociado a un repositorio conectado.
+# PR de GitHub asociado a un repositorio conectado.
 class PullRequest(Base):
     __tablename__ = "pull_requests"
     __table_args__ = (
-        # Evita duplicar el mismo PR si se vuelve a sincronizar el repo (idempotencia).
+        # Evita duplicar el PR al re-sincronizar (idempotencia).
         UniqueConstraint("repository_id", "github_pr_number", name="uq_pull_requests_repo_number"),
     )
 

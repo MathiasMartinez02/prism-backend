@@ -1,7 +1,6 @@
 """Templates de prompt versionados. Cambiar el contenido del prompt implica subir PROMPT_VERSION."""
 
-# Se guarda en analyses.ai_provider/prompt_version (bloque 2.4) para poder debuggear a futuro
-# por que salio raro un finding, sabiendo con que version de prompt se genero.
+# Se guarda en analyses.prompt_version para debuggear findings raros.
 PROMPT_VERSION = "v1"
 
 _ANALYSIS_INSTRUCTIONS = """You are a senior code reviewer analyzing a single diff hunk from a Pull Request.
@@ -35,7 +34,7 @@ def build_analysis_prompt(file_path: str, diff_hunk: str, context: str = "") -> 
     return "\n".join(parts)
 
 
-# Prompt correctivo usado en el retry cuando la primera respuesta no parseo como JSON valido.
+# Prompt correctivo para reintentar cuando el JSON no es valido.
 def build_retry_prompt(original_prompt: str, invalid_response: str) -> str:
     return (
         f"{original_prompt}\n\n"

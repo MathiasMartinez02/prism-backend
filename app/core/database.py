@@ -10,12 +10,12 @@ engine = create_engine(settings.database_url, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
-# Base declarativa de la que heredan todos los modelos SQLAlchemy del proyecto.
+# Base declarativa para los modelos SQLAlchemy.
 class Base(DeclarativeBase):
     pass
 
 
-# Dependencia inyectable: entrega una sesion de DB por request y la cierra siempre al final.
+# Entrega una sesion de DB por request y la cierra al final.
 def get_db() -> Generator[Session, None, None]:
     db = SessionLocal()
     try:

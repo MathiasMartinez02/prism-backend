@@ -7,7 +7,7 @@ Category = Literal["bug", "security", "performance", "quality", "tests"]
 Severity = Literal["low", "medium", "high"]
 
 
-# Forma exacta que le exigimos al modelo por cada finding, validada al parsear su respuesta.
+# Forma exacta que le exigimos al modelo por cada finding.
 class FindingCreate(BaseModel):
     category: Category
     severity: Severity

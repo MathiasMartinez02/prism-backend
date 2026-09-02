@@ -5,8 +5,7 @@ from app.ai.provider import AIProvider
 from app.core.config import settings
 
 
-# Instancia el AIProvider configurado. No cachea: cada request arma su propio provider
-# (los clientes son livianos de crear, y evita compartir estado entre requests).
+# Instancia el AIProvider configurado (no cachea entre requests).
 def get_ai_provider() -> AIProvider:
     if settings.ai_provider == "gemini":
         if not settings.gemini_api_key:

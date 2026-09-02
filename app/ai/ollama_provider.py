@@ -9,10 +9,7 @@ DEFAULT_MODEL = "qwen2.5-coder:7b"
 
 
 class OllamaProvider(JsonRetryAIProvider):
-    # ConnectionError es lo que tira el SDK de ollama cuando no puede conectarse al server
-    # (Ollama no esta corriendo) - no hereda de httpx.HTTPError, hay que catchearlo aparte.
-    # httpx.HTTPError cubre timeouts; ResponseError es lo que tira el SDK cuando el server
-    # responde un error (ej. el modelo pedido no esta descargado localmente).
+    # ConnectionError (server caido), HTTPError (timeout) y ResponseError (error del SDK) son transitorios.
     TRANSIENT_ERRORS = (ConnectionError, httpx.HTTPError, ResponseError)
 
     def __init__(self, host: str | None = None, model: str = DEFAULT_MODEL):

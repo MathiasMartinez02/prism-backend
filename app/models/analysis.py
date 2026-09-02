@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from app.models.pull_request import PullRequest
 
 
-# Analysis representa una corrida del pipeline de AI sobre un PR (pendiente/en curso/completa/fallida).
+# Corrida del pipeline de AI sobre un PR.
 class Analysis(Base):
     __tablename__ = "analyses"
 
@@ -28,8 +28,7 @@ class Analysis(Base):
     status: Mapped[str] = mapped_column(Text, nullable=False, default="pending")
     overall_score: Mapped[int | None] = mapped_column(Integer, nullable=True)
     ai_provider: Mapped[str | None] = mapped_column(Text, nullable=True)  # 'gemini' | 'ollama'
-    # Version del prompt usado (ver app/ai/prompts.py) - permite debuggear por que salio raro
-    # un finding sabiendo exactamente con que prompt se genero.
+    # Version del prompt usado, para debuggear findings raros.
     prompt_version: Mapped[str | None] = mapped_column(Text, nullable=True)
     error_message: Mapped[str | None] = mapped_column(Text, nullable=True)
     started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
